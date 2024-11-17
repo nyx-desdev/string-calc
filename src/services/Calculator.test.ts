@@ -23,4 +23,21 @@ describe("Calculator", () => {
   test("handles newlines between numbers", () => {
     expect(calculator.add("1\n2,3")).toBe(6);
   });
+
+  test("supports custom delimiters", () => {
+    expect(calculator.add("//;\n1;2")).toBe(3);
+  });
+
+  test("throws error for invalid delimiter format", () => {
+    expect(() => calculator.add("//;1;2")).toThrow("Invalid format");
+  });
+
+  test("throws error for invalid delimiter format", () => {
+    expect(() => calculator.add("//1,2")).toThrow("Invalid format");
+  });
+
+  test("throws error for invalid delimiter format", () => {
+    expect(() => calculator.add("//\n1,2")).toThrow("Invalid format");
+  });
+
 });
