@@ -49,4 +49,10 @@ describe("Calculator", () => {
       "negative numbers not allowed -1,-2,-4"
     );
   });
+
+  test("throws error for invalid numbers", () => {
+    expect(() => calculator.add("1,2,=")).toThrow("Invalid format");
+  });
+
+
 });

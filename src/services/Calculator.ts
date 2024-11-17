@@ -4,6 +4,11 @@ export class Calculator {
 
     const { delimiters, cleanNumbers } = this.parseDelimiters(numbers);
     
+    const validInputRegex = new RegExp(`^[0-9${delimiters.join("")}-]+$`);
+    if (!validInputRegex.test(cleanNumbers)) {
+      throw new Error("Invalid format");
+    }
+    
     const nums = cleanNumbers
       .split(new RegExp(`[${delimiters.join("")}]`))
       .map(Number);
@@ -20,7 +25,7 @@ export class Calculator {
     delimiters: string[];
     cleanNumbers: string;
   } {
-    const delimiterMatch = numbers.match(/^\/\/(.)\n/);
+    const delimiterMatch = numbers.match(/^\/\/([^0-9\n])\n/);
     let delimiters = [",", "\n"];
 
     if (numbers.startsWith("//")) {
