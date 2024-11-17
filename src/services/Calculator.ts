@@ -3,11 +3,17 @@ export class Calculator {
     if (!numbers) return 0;
 
     const { delimiters, cleanNumbers } = this.parseDelimiters(numbers);
-
-    return cleanNumbers
+    
+    const nums = cleanNumbers
       .split(new RegExp(`[${delimiters.join("")}]`))
-      .map(Number)
-      .reduce((acc, num) => acc + num, 0);
+      .map(Number);
+    
+    const negatives = nums.filter(n => n < 0);
+    if (negatives.length > 0) {
+      throw new Error(`negative numbers not allowed ${negatives.join(',')}`);
+    }
+
+    return nums.reduce((acc, num) => acc + num, 0);
   }
 
   private parseDelimiters(numbers: string): {
