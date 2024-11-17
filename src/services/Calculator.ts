@@ -2,6 +2,8 @@ export class Calculator {
   add(numbers: string): number {
     if (!numbers) return 0;
 
+    numbers = numbers.replace(/\\n/g, "\n");
+
     const { delimiters, cleanNumbers } = this.parseDelimiters(numbers);
     
     const validInputRegex = new RegExp(`^[0-9${delimiters.join("")}-]+$`);
