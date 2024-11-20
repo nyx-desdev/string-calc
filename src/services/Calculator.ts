@@ -1,37 +1,50 @@
 export class Calculator {
   add(numbers: string): number {
     if (!numbers) return 0;
-
-    numbers = numbers.replace(/\\n/g, "\n");
-
-    const { delimiters, cleanNumbers } = this.parseDelimiters(numbers);
     
+    // Convert escaped newline characters (\n) to actual newline characters
+    const normalizedInput = this.normalizeInput(numbers);
+    const { delimiters, cleanNumbers } = this.extractDelimitersAndNumbers(normalizedInput);
+    
+    this.validateInput(cleanNumbers, delimiters);
+    const nums = this.parseNumbers(cleanNumbers, delimiters);
+    this.validateNegatives(nums);
+
+    return this.calculateResult(nums, delimiters);
+  }
+
+  private normalizeInput(numbers: string): string {
+    return numbers.replace(/\\n/g, "\n");
+  }
+
+  private validateInput(cleanNumbers: string, delimiters: string[]): void {
     const validInputRegex = new RegExp(`^[0-9${delimiters.join("")}-]+$`);
     if (!validInputRegex.test(cleanNumbers)) {
       throw new Error("Invalid format");
     }
+  }
 
-    const nums = cleanNumbers
+  private parseNumbers(cleanNumbers: string, delimiters: string[]): number[] {
+    return cleanNumbers
       .split(new RegExp(`[${delimiters.join("")}]`))
       .map(Number);
-    
+  }
+
+  private validateNegatives(nums: number[]): void {
     const negatives = nums.filter(n => n < 0);
     if (negatives.length > 0) {
       throw new Error(`negative numbers not allowed ${negatives.join(',')}`);
     }
+  }
 
+  private calculateResult(nums: number[], delimiters: string[]): number {
     if (delimiters.includes("*")) {
-      return cleanNumbers
-        .split("*")
-        .map(Number)
-        .reduce((acc, num) => acc * num, 1);
+      return nums.reduce((acc, num) => acc * num, 1);
     }
-    
-
     return nums.reduce((acc, num) => acc + num, 0);
   }
 
-  private parseDelimiters(numbers: string): {
+  private extractDelimitersAndNumbers(numbers: string): {
     delimiters: string[];
     cleanNumbers: string;
   } {
