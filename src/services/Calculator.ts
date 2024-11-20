@@ -10,7 +10,7 @@ export class Calculator {
     if (!validInputRegex.test(cleanNumbers)) {
       throw new Error("Invalid format");
     }
-    
+
     const nums = cleanNumbers
       .split(new RegExp(`[${delimiters.join("")}]`))
       .map(Number);
@@ -19,6 +19,14 @@ export class Calculator {
     if (negatives.length > 0) {
       throw new Error(`negative numbers not allowed ${negatives.join(',')}`);
     }
+
+    if (delimiters.includes("*")) {
+      return cleanNumbers
+        .split("*")
+        .map(Number)
+        .reduce((acc, num) => acc * num, 1);
+    }
+    
 
     return nums.reduce((acc, num) => acc + num, 0);
   }

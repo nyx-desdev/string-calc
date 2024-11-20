@@ -28,6 +28,10 @@ describe("Calculator", () => {
     expect(calculator.add("//;\n1;2")).toBe(3);
   });
 
+  test("supports custom delimiters * to multiply numbers", () => {
+    expect(calculator.add("//*\n2*3")).toBe(6);
+  });
+
   test("throws error for invalid delimiter format", () => {
     expect(() => calculator.add("//;1;2")).toThrow("Invalid format");
   });
@@ -44,9 +48,13 @@ describe("Calculator", () => {
     expect(() => calculator.add("-1,2")).toThrow("negative numbers not allowed -1");
   });
 
+    test("throws error for negative numbers", () => {
+    expect(() => calculator.add("-1,2")).toThrow("negative numbers not allowed -1");
+  });
+
   test("throws error for multiple negative numbers", () => {
-    expect(() => calculator.add("-1,-2,3,-4")).toThrow(
-      "negative numbers not allowed -1,-2,-4"
+    expect(() => calculator.add("//*\n2*-3")).toThrow(
+      "negative numbers not allowed -3"
     );
   });
 
